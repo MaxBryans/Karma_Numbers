@@ -7,7 +7,6 @@ using UnityEngine;
 // responsible for controlling the Game State and other components
 public class GC : MonoBehaviour
 {
-
     private enum GameState
     {
         Loading,

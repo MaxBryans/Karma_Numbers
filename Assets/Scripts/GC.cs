@@ -7,18 +7,27 @@ using UnityEngine;
 // responsible for controlling the Game State and other components
 public class GC : MonoBehaviour
 {
+
+    private enum GameState
+    {
+        Loading,
+        Awaiting_Start,
+        Playing,
+        Paused
+    }
+
     #region Members
 
     public Karma_API api;
     private Karma_API_JSON level = new Karma_API_JSON();
+    [SerializeField] private GameState state = GameState.Loading;
+    [SerializeField] private bool levelLoaded = false;
+    [SerializeField] private bool paused = false;
     private Vector2 screen;
-    [SerializeField]
-    private bool Ascending = false;
-    [SerializeField]
-    private int[] numbers;
+    [SerializeField] private bool Ascending = false;
+    [SerializeField] private int[] numbers;
 
-    [SerializeField]
-    private Vector2 mouse = new Vector2(); // always handy for debugging, stored as Ratio of screen size (0-1)
+    [SerializeField] private Vector2 mouse = new Vector2(); // always handy for debugging, stored as Ratio of screen size (0-1)
     #endregion
 
     #region Methods
@@ -26,6 +35,7 @@ public class GC : MonoBehaviour
     // Call the API service to get a level
     public void GetLevel ()
     {
+        state = GameState.Loading;
         StartCoroutine(api.GetLevel(OnLevelLoad));
     }
 
@@ -36,8 +46,45 @@ public class GC : MonoBehaviour
         Ascending = false;
         if (level.order == "ASC") Ascending = true;
         numbers = level.numbers;
+        levelLoaded = true;
         Debug.Log("Controller says top number = " + numbers[0].ToString());
-        // will add change State call here
+        // State Change
+        ChangeState();
+
+    }
+
+    private void ChangeState()
+    {
+        if (state == GameState.Loading)
+        {
+            state = GameState.Awaiting_Start;
+            Debug.Log("Numbers are in order : " + CheckNumbers()); 
+        }
+    }
+
+    private bool CheckNumbers()
+    {
+        if (Ascending)
+        {
+            for (int i = 0; i < numbers.Length - 1; i++)
+            {
+                if (numbers[i] < numbers[i+1])
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numbers.Length - 1; i++)
+            {
+                if (numbers[i] > numbers[i+1])
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // if there's a touch .. use that as "mouse" ... else use the mouse
@@ -65,6 +112,7 @@ public class GC : MonoBehaviour
     {
         screen = new Vector2(Screen.width, Screen.height);
         GetLevel();
+
     }
 
     // Update is called once per frame

@@ -27,6 +27,10 @@ public class GC : MonoBehaviour
     [SerializeField] private int[] numbers;
 
     [SerializeField] private Vector2 mouse = new Vector2(); // always handy for debugging, stored as Ratio of screen size (0-1)
+
+    // need to talk to the Canvas_Controller
+    public Canvas_Controller CC;
+
     #endregion
 
     #region Methods
@@ -57,7 +61,9 @@ public class GC : MonoBehaviour
         if (state == GameState.Loading)
         {
             state = GameState.Awaiting_Start;
-            Debug.Log("Numbers are in order : " + CheckNumbers()); 
+            Debug.Log("Numbers are in order : " + CheckNumbers());
+            // Not the right place, but an initial test
+            CC.SpawnNumbers(numbers);
         }
     }
 

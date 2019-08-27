@@ -26,7 +26,9 @@ public class GC : MonoBehaviour
     [SerializeField] private bool Ascending = false;
     [SerializeField] private int[] numbers;
 
-    [SerializeField] private Vector2 mouse = new Vector2(); // always handy for debugging, stored as Ratio of screen size (0-1)
+    public Vector2 mouse = new Vector2(0,0); // always handy for debugging, stored as Ratio of screen size (0-1)
+    [SerializeField]
+    private int BoxSelected = -1;
 
     // need to talk to the Canvas_Controller
     public Canvas_Controller CC;
@@ -95,16 +97,31 @@ public class GC : MonoBehaviour
     // if there's a touch .. use that as "mouse" ... else use the mouse
     void GetMouseTouch()
     {
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
             mouse.x = touch.position.x / screen.x;
             mouse.y = touch.position.y / screen.y;
+            // mouse = new Vector2(touch.position.x / screen.x, touch.position.y / screen.y);
         }
         else
         {
             mouse.x = Input.mousePosition.x / screen.x;
             mouse.y = Input.mousePosition.y / screen.y;
+            // mouse = new Vector2(Input.mousePosition.x / screen.x, Input.mousePosition.y / screen.y);
+        }
+
+        // now to populate what "box" it's touching ... only if playing
+        if (state == GameState.Awaiting_Start)
+        {
+            BoxSelected = -1;
+            for (int i = 0; i < CC.myPositions.Length; i++)
+            {
+                float t = (CC.myPositions[i].y + (CC.pitch/2)) / screen.y;
+                float b = (CC.myPositions[i].y - (CC.pitch / 2)) / screen.y;
+                if (t > mouse.y && b < mouse.y) BoxSelected = i;
+            }
         }
     }
 

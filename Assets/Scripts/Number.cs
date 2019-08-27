@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Number : MonoBehaviour
 {
     public Canvas_Controller CC; // N.B. injected by the creating Canvas Controller
 
     public int myValue;
-    public int myPosition;
     public Text text;
 
     private RectTransform myRT;
+    [SerializeField]
+    private bool selected = false;
+    private int selectedPosition;
 
-    public void configure (int value, int position)
+    public void configure (int value, Vector2 position)
     {
         myValue = value;
-        myPosition = position;
         text.text = value.ToString();
 
         myRT.sizeDelta = new Vector2(CC.width, CC.pitch);
-        myRT.position = new Vector2(CC.width / 2f, CC.top - (myPosition * CC.pitch));
+        myRT.position = position;
     }
 
     void Awake()
@@ -37,6 +39,6 @@ public class Number : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+   
     }
 }

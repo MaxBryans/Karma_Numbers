@@ -19,12 +19,14 @@ public class Canvas_Controller : MonoBehaviour
 
     public GameObject numberPreFab;
 
-    private Vector2 screen = new Vector2();
-    private Number[] myNumbers;
+    public Vector2 screen { get; private set; }
+    public Number[] myNumbers { get; private set; }
+    public Vector2[] myPositions { get; private set; } // the "centre point) of each grid to be displayed.  Storing reference for speed later
 
     public float top   { get; private set; }
     public float width { get; private set; }
     public float pitch { get; private set; }
+    public float offset { get; private set; }
 
     void ConfigurePanels()
     {
@@ -36,10 +38,31 @@ public class Canvas_Controller : MonoBehaviour
         DirectionDown.position = new Vector3(screen.x * 1 / 8, screen.y / 2f);
     }
 
+    private void SetPositions (int number)
+    {
+        if (number <=0 || number > 10)
+        {
+            Debug.Log("Cannot set Positions: improper parameter");
+            return;
+        }
+
+        float mod = 0;
+        if (number % 2 != 0) mod = 0.5f;
+        mod += Mathf.Floor(number / 2);
+        mod = (screen.y / 2f) + (mod * pitch);
+        myPositions = new Vector2[number];
+        for (int i = 0; i < number; i++)
+        {
+            myPositions[i] = new Vector2(screen.x / 2, mod - ((float)(i+0.5) * pitch));
+        }
+    }
+
     public void SpawnNumbers (int[] numbers, bool Ascending)
     {
+        offset = (10 - numbers.Length) / 2 * pitch;
         SetLoadingCanvas(false);
         myNumbers = new Number[numbers.Length];
+        SetPositions(numbers.Length);
         if (Ascending) { DirectionUp.gameObject.SetActive(true); DirectionDown.gameObject.SetActive(false); }
         else { DirectionUp.gameObject.SetActive(false); DirectionDown.gameObject.SetActive(true); }
 
@@ -48,7 +71,7 @@ public class Canvas_Controller : MonoBehaviour
             GameObject num = Instantiate(numberPreFab);
             Number numC = num.GetComponent<Number>();
             numC.CC = this; // tell the new number who is boss
-            numC.configure(numbers[i], i);
+            numC.configure(numbers[i], myPositions[i]);
             num.transform.SetParent(Play.transform);
 
             myNumbers[i] = numC;
@@ -71,8 +94,7 @@ public class Canvas_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        screen.x = width = Screen.width;
-        screen.y = Screen.height;
+        screen = new Vector2(width = Screen.width, Screen.height);
         pitch = screen.y * 0.07f;
         top = screen.y * (0.85f - 0.035f);
         ConfigurePanels();

@@ -63,7 +63,7 @@ public class GC : MonoBehaviour
             state = GameState.Awaiting_Start;
             Debug.Log("Numbers are in order : " + CheckNumbers());
             // Not the right place, but an initial test
-            CC.SpawnNumbers(numbers);
+            CC.SpawnNumbers(numbers,Ascending);
         }
     }
 

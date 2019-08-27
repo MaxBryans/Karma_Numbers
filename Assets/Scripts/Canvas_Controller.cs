@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Canvas_Controller : MonoBehaviour
 {
 
+    public Load_Rotator LoadScreen;
+
     public CanvasGroup PlayCanvas;
     public CanvasGroup LoadingCanvas;
 
@@ -56,7 +58,7 @@ public class Canvas_Controller : MonoBehaviour
     private void SetLoadingCanvas (bool On_Off)
     {
         PlayCanvas.enabled = !On_Off;
-        LoadingCanvas.enabled = On_Off;
+        LoadScreen.Enable(On_Off);
     }
 
 

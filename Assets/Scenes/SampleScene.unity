@@ -1172,6 +1172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd0c1a72aba76245b01b33dc4e95799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LoadScreen: {fileID: 290771677}
   PlayCanvas: {fileID: 599802859}
   LoadingCanvas: {fileID: 1788942053}
   Title: {fileID: 2057147256}

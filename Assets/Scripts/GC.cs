@@ -29,6 +29,10 @@ public class GC : MonoBehaviour
     public Vector2 mouse = new Vector2(0,0); // always handy for debugging, stored as Ratio of screen size (0-1)
     [SerializeField]
     private int BoxSelected = -1;
+    [SerializeField]
+    private int BoxHoverOver = -1;
+    [SerializeField]
+    private bool MouseDown = false;
 
     // need to talk to the Canvas_Controller
     public Canvas_Controller CC;
@@ -115,14 +119,26 @@ public class GC : MonoBehaviour
         // now to populate what "box" it's touching ... only if playing
         if (state == GameState.Awaiting_Start)
         {
-            BoxSelected = -1;
+            BoxHoverOver = -1;
             for (int i = 0; i < CC.myPositions.Length; i++)
             {
                 float t = (CC.myPositions[i].y + (CC.pitch/2)) / screen.y;
                 float b = (CC.myPositions[i].y - (CC.pitch / 2)) / screen.y;
-                if (t > mouse.y && b < mouse.y) BoxSelected = i;
+                if (t > mouse.y && b < mouse.y) BoxHoverOver = i;
             }
         }
+    }
+
+    private void CheckSwap()
+    {
+        // do something
+        BoxSelected = -1;
+        MouseDown = false;
+    }
+
+    private void CheckMove()
+    {
+        // move the tiles
     }
 
     #endregion
@@ -141,6 +157,28 @@ public class GC : MonoBehaviour
     void Update()
     {
         GetMouseTouch();
+
+        if (state == GameState.Awaiting_Start)
+        {
+            // frame mouse first clicked
+            if (Input.GetMouseButtonDown(0) )
+            {
+                MouseDown = true;
+                BoxSelected = BoxHoverOver;
+            }
+
+            else if (Input.GetMouseButton(0))
+            {
+                CheckMove();
+                Debug.Log("CheckMove()");
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                CheckSwap();
+                Debug.Log("CheckSwap()");
+            }
+        }
     }
     #endregion
 }

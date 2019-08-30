@@ -14,7 +14,7 @@ public class Number : MonoBehaviour
 
     private RectTransform myRT;
     [SerializeField]
-    private bool selected = false;
+    public bool selected = false;
     private int selectedPosition;
 
     public void configure (int value, Vector2 position)

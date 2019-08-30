@@ -23,6 +23,8 @@ public class GC : MonoBehaviour
     [SerializeField] private bool levelLoaded = false;
     [SerializeField] private bool paused = false;
     private Vector2 screen;
+    private Vector2 offset = new Vector2(0, 0);
+    private Vector2 datum = new Vector2(0, 0);
     [SerializeField] private bool Ascending = false;
     [SerializeField] private int[] numbers;
     [SerializeField] private int[] MovingNumbers;
@@ -150,8 +152,8 @@ public class GC : MonoBehaviour
     void Start()
     {
         screen = new Vector2(Screen.width, Screen.height);
+        offset.x = screen.x * 0.1f;
         GetLevel();
-
     }
 
     // Update is called once per frame
@@ -164,20 +166,45 @@ public class GC : MonoBehaviour
             // frame mouse first clicked
             if (Input.GetMouseButtonDown(0) )
             {
+                datum.y = mouse.y;
                 MouseDown = true;
                 BoxSelected = BoxHoverOver;
+                if (BoxHoverOver != -1)
+                {
+                    CC.SelectBox(BoxHoverOver);
+                }
             }
-
+            // mouse is already down
             else if (Input.GetMouseButton(0))
             {
                 CheckMove();
                 Debug.Log("CheckMove()");
-            }
+                offset.y = (mouse.y - datum.y) * screen.y;
+                if (BoxSelected != -1 && BoxHoverOver != -1)
+                {
+                    //    if (BoxSelected != BoxHoverOver)
+                    //    {
+                    //        CC.SwapNumbers(BoxSelected, BoxHoverOver);
+                    //        CC.SelectBox(BoxHoverOver);
+                    //    }
+                    CC.DoOffsets(BoxSelected, BoxHoverOver);
+                    CC.MoveBox(BoxSelected, offset);
+                }
 
+            }
+            // mouse released
             if (Input.GetMouseButtonUp(0))
             {
-                CheckSwap();
+                datum.y = 0;
+
                 Debug.Log("CheckSwap()");
+                if (BoxSelected != -1)
+                {
+                    CC.DeselectAllBoxes();
+                    CC.MoveBox(BoxSelected, Vector2.zero);
+                    BoxSelected = -1;
+                }
+                CheckSwap();
             }
         }
     }

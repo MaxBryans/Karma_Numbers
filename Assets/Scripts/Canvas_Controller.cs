@@ -40,7 +40,39 @@ public class Canvas_Controller : MonoBehaviour
 
     public void SwapNumbers (int index1, int index2)
     {
+        int temp = myNumbers[index1].myValue;
+        myNumbers[index1].setNumber(myNumbers[index2].myValue);
+        myNumbers[index2].setNumber(temp);
+        bool tmpbool = myNumbers[index1].selected;
+        myNumbers[index1].selected = myNumbers[index2].selected;
+        myNumbers[index2].selected = tmpbool;
+    }
 
+    public void MoveBox (int box, Vector2 offset)
+    {
+        myNumbers[box].setPosition(offset + myPositions[box]);
+    }
+
+    public void DoOffsets (int selected, int hoverover)
+    {
+            for (int i = 0; i < myNumbers.Length; i++)
+            {
+              myNumbers[i].setPosition(myPositions[i]);
+              if (i > selected && i <= hoverover) myNumbers[i].setPosition(myPositions[i-1]);
+              if (i < selected && i >= hoverover) myNumbers[i].setPosition(myPositions[i + 1]);
+
+             }
+    }
+
+    public void SelectBox (int box)
+    {
+        DeselectAllBoxes();
+        myNumbers[box].Highlight(true);
+    }
+
+    public void DeselectAllBoxes ()
+    {
+        foreach (Number num in myNumbers) num.Highlight(false);
     }
 
     private void SetPositions (int number)

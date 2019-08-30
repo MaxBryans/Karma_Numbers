@@ -10,6 +10,7 @@ public class Number : MonoBehaviour
 
     public int myValue;
     public Text text;
+    public bool Highlighted;
 
     private RectTransform myRT;
     [SerializeField]
@@ -18,11 +19,36 @@ public class Number : MonoBehaviour
 
     public void configure (int value, Vector2 position)
     {
-        myValue = value;
-        text.text = value.ToString();
+        setNumber(value);
 
         myRT.sizeDelta = new Vector2(CC.width, CC.pitch);
         myRT.position = position;
+        Highlight(false);
+    }
+
+    public void setNumber(int number)
+    {
+        myValue = number;
+        text.text = myValue.ToString();
+    }
+
+    public void setPosition (Vector2 position)
+    {
+        myRT.position = position;
+    }
+
+    public void Highlight (bool On_Off)
+    {
+        if (!On_Off)
+        {
+            text.color = Color.white;
+            Highlighted = false;
+        }
+        else
+        {
+            text.color = Color.green;
+            Highlighted = true;
+        }
     }
 
     void Awake()

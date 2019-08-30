@@ -25,6 +25,7 @@ public class GC : MonoBehaviour
     private Vector2 screen;
     [SerializeField] private bool Ascending = false;
     [SerializeField] private int[] numbers;
+    [SerializeField] private int[] MovingNumbers;
 
     public Vector2 mouse = new Vector2(0,0); // always handy for debugging, stored as Ratio of screen size (0-1)
     [SerializeField]

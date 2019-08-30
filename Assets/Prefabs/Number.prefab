@@ -61,8 +61,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CC: {fileID: 0}
   myValue: 0
-  myPosition: 0
   text: {fileID: 6762976657120324247}
+  selected: 0
 --- !u!33 &1046743075498972363
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -83,8 +83,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 0061c337156e6e44584f0b1c478f4018, type: 3}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

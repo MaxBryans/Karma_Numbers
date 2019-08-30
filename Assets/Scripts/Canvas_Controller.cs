@@ -38,6 +38,11 @@ public class Canvas_Controller : MonoBehaviour
         DirectionDown.position = new Vector3(screen.x * 1 / 8, screen.y / 2f);
     }
 
+    public void SwapNumbers (int index1, int index2)
+    {
+
+    }
+
     private void SetPositions (int number)
     {
         if (number <=0 || number > 10)

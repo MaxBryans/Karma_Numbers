@@ -135,8 +135,29 @@ public class GC : MonoBehaviour
     private void CheckSwap()
     {
         // do something
+
+        if (BoxSelected != -1 && BoxHoverOver != -1 && BoxSelected != BoxHoverOver)
+        {
+            ReOrder(BoxSelected,BoxHoverOver);
+        }
+        CC.UpdateNumbers(numbers);
         BoxSelected = -1;
         MouseDown = false;
+
+    }
+
+    private void ReOrder (int selected, int hover)
+    {
+        int len = numbers.Length;
+        int[] newNum = new int[len];
+        for (int i = 0; i < len; i++)
+        {
+            if (i == hover) newNum[i] = numbers[selected];
+            else if (i >= selected && i < hover) newNum[i] = numbers[i + 1];
+            else if (i <= selected && i > hover) newNum[i] = numbers[i - 1];
+            else { newNum[i] = numbers[i]; }
+        }
+        numbers = newNum;
     }
 
     private void CheckMove()
@@ -196,14 +217,7 @@ public class GC : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 datum.y = 0;
-
                 Debug.Log("CheckSwap()");
-                if (BoxSelected != -1)
-                {
-                    CC.DeselectAllBoxes();
-                    CC.MoveBox(BoxSelected, Vector2.zero);
-                    BoxSelected = -1;
-                }
                 CheckSwap();
             }
         }

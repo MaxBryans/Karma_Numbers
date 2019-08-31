@@ -70,6 +70,16 @@ public class Canvas_Controller : MonoBehaviour
         myNumbers[box].Highlight(true);
     }
 
+    public void UpdateNumbers (int[] values)
+    {
+        for (int i = 0, len = values.Length; i < len; i++)
+        {
+            myNumbers[i].setNumber(values[i]);
+            myNumbers[i].Highlight(false);
+            myNumbers[i].setPosition(myPositions[i]);
+        }
+    }
+
     public void DeselectAllBoxes ()
     {
         foreach (Number num in myNumbers) num.Highlight(false);

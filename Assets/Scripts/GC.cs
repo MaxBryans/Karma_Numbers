@@ -41,6 +41,7 @@ public class GC : MonoBehaviour
     private bool MouseDown = false;
     [SerializeField]
     private float timer = 0f;
+    private bool timerRunning = false;
     public Text timertext;
 
     // need to talk to the Canvas_Controller
@@ -80,6 +81,7 @@ public class GC : MonoBehaviour
             // Not the right place, but an initial test
             CC.SpawnNumbers(numbers,Ascending);
             timer = 0f;
+            timerRunning = true;
         }
     }
 
@@ -150,6 +152,7 @@ public class GC : MonoBehaviour
         CC.UpdateNumbers(numbers);
         BoxSelected = -1;
         MouseDown = false;
+        if (CheckNumbers()) timerRunning = false;
 
     }
 
@@ -242,7 +245,7 @@ public class GC : MonoBehaviour
             }
 
             // Update timer
-            UpdateTimer();
+            if (timerRunning) UpdateTimer();
         }
 
 

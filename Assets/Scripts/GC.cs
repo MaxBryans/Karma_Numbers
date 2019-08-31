@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Game Controller (GC) class
 // responsible for controlling the Game State and other components
@@ -35,7 +36,12 @@ public class GC : MonoBehaviour
     [SerializeField]
     private int BoxHoverOver = -1;
     [SerializeField]
+    private int OldHover = -1;
+    [SerializeField]
     private bool MouseDown = false;
+    [SerializeField]
+    private float timer = 0f;
+    public Text timertext;
 
     // need to talk to the Canvas_Controller
     public Canvas_Controller CC;
@@ -73,6 +79,7 @@ public class GC : MonoBehaviour
             Debug.Log("Numbers are in order : " + CheckNumbers());
             // Not the right place, but an initial test
             CC.SpawnNumbers(numbers,Ascending);
+            timer = 0f;
         }
     }
 
@@ -165,6 +172,16 @@ public class GC : MonoBehaviour
         // move the tiles
     }
 
+    private void UpdateTimer()
+    {
+        timer += Time.deltaTime;
+        int sec = Mathf.FloorToInt(timer);
+        int mod = sec % 60;
+        string padding = "";
+        if (mod < 10) padding = "0";
+        timertext.text = ((sec - mod) / 60).ToString() + ":" + padding+  mod.ToString();
+    }
+
     #endregion
 
     #region Unity API
@@ -181,6 +198,7 @@ public class GC : MonoBehaviour
     void Update()
     {
         GetMouseTouch();
+
 
         if (state == GameState.Awaiting_Start)
         {
@@ -203,11 +221,6 @@ public class GC : MonoBehaviour
                 offset.y = (mouse.y - datum.y) * screen.y;
                 if (BoxSelected != -1 && BoxHoverOver != -1)
                 {
-                    //    if (BoxSelected != BoxHoverOver)
-                    //    {
-                    //        CC.SwapNumbers(BoxSelected, BoxHoverOver);
-                    //        CC.SelectBox(BoxHoverOver);
-                    //    }
                     CC.DoOffsets(BoxSelected, BoxHoverOver);
                     CC.MoveBox(BoxSelected, offset);
                 }
@@ -220,7 +233,21 @@ public class GC : MonoBehaviour
                 Debug.Log("CheckSwap()");
                 CheckSwap();
             }
+
+            // fallout case ... if player has scrolled over/under the play field ... need to drop
+            if (OldHover >=0 && BoxHoverOver == -1 && BoxSelected != -1)
+            {
+                BoxHoverOver = OldHover;
+                CheckSwap();
+            }
+
+            // Update timer
+            UpdateTimer();
         }
+
+
+        // store HoverOver as a reference at end of frame
+        OldHover = BoxHoverOver;
     }
     #endregion
 }

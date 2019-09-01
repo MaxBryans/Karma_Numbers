@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Canvas_Controller : MonoBehaviour
 {
+    public GC gc;
 
     public Load_Rotator LoadScreen;
 
@@ -16,11 +17,15 @@ public class Canvas_Controller : MonoBehaviour
     public RectTransform Controls;
     public RectTransform DirectionUp;
     public RectTransform DirectionDown;
+    public RectTransform Welcome;
+    public RectTransform StartIntro;
 
     public GameObject numberPreFab;
 
     public Vector2 screen { get; private set; }
     public Number[] myNumbers { get; private set; }
+    public int[] gameNumbers { get; private set; }
+    public bool Ascending = false;
     public Vector2[] myPositions { get; private set; } // the "centre point) of each grid to be displayed.  Storing reference for speed later
 
     public float top   { get; private set; }
@@ -80,6 +85,65 @@ public class Canvas_Controller : MonoBehaviour
         }
     }
 
+    public void CounterFinished ()
+    {
+        StateChange(GameState.Playing);
+    }
+
+    public void StateChange (GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Loading:
+                Welcome.gameObject.SetActive(false);
+                LoadingCanvas.gameObject.SetActive(true);
+                StartIntro.gameObject.SetActive(false);
+                Play.gameObject.SetActive(false);
+                break;
+
+            case GameState.Welcome:
+                Welcome.gameObject.SetActive(true);
+                LoadingCanvas.gameObject.SetActive(false);
+                StartIntro.gameObject.SetActive(false);
+                Play.gameObject.SetActive(false);
+                break;
+
+            case GameState.Game_Intro:
+                Welcome.gameObject.SetActive(false);
+                LoadingCanvas.gameObject.SetActive(false);
+                StartIntro.gameObject.SetActive(true);
+                StartIntro.gameObject.GetComponentInChildren<Intro>().StartCounter(true);
+                Play.gameObject.SetActive(false);
+                break;
+
+            case GameState.Playing:
+                Welcome.gameObject.SetActive(false);
+                LoadingCanvas.gameObject.SetActive(false);
+                StartIntro.gameObject.SetActive(false);
+                Play.gameObject.SetActive(true);
+                GameStart();
+                break;
+
+            case GameState.Game_Over:
+                Welcome.gameObject.SetActive(false);
+                LoadingCanvas.gameObject.SetActive(false);
+                StartIntro.gameObject.SetActive(false);
+                Play.gameObject.SetActive(false);
+                break;
+
+            case GameState.Awaiting_Start:
+                Welcome.gameObject.SetActive(false);
+                LoadingCanvas.gameObject.SetActive(false);
+                StartIntro.gameObject.SetActive(false);
+                Play.gameObject.SetActive(false);
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
     public void DeselectAllBoxes ()
     {
         foreach (Number num in myNumbers) num.Highlight(false);
@@ -106,19 +170,29 @@ public class Canvas_Controller : MonoBehaviour
 
     public void SpawnNumbers (int[] numbers, bool Ascending)
     {
-        offset = (10 - numbers.Length) / 2 * pitch;
+
+        gameNumbers = numbers;
+        this.Ascending = Ascending;
+
+        StateChange(GameState.Game_Intro);
+
+    }
+
+    private void GameStart()
+    {
+        offset = (10 - gameNumbers.Length) / 2 * pitch;
         SetLoadingCanvas(false);
-        myNumbers = new Number[numbers.Length];
-        SetPositions(numbers.Length);
+        myNumbers = new Number[gameNumbers.Length];
+        SetPositions(gameNumbers.Length);
         if (Ascending) { DirectionUp.gameObject.SetActive(true); DirectionDown.gameObject.SetActive(false); }
         else { DirectionUp.gameObject.SetActive(false); DirectionDown.gameObject.SetActive(true); }
 
-        for (int i = 0; i < numbers.Length; i++)
+        for (int i = 0; i < gameNumbers.Length; i++)
         {
             GameObject num = Instantiate(numberPreFab);
             Number numC = num.GetComponent<Number>();
             numC.CC = this; // tell the new number who is boss
-            numC.configure(numbers[i], myPositions[i]);
+            numC.configure(gameNumbers[i], myPositions[i]);
             num.transform.SetParent(Play.transform);
 
             myNumbers[i] = numC;
@@ -131,6 +205,11 @@ public class Canvas_Controller : MonoBehaviour
         LoadScreen.Enable(On_Off);
     }
 
+    // Button Management
+    public void Welcome_Start_Button ()
+    {
+
+    }
 
     void Awake ()
     {

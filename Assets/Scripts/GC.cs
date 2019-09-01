@@ -4,23 +4,28 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GameState
+{
+    Loading,
+    Welcome,
+    Awaiting_Start,
+    Game_Intro,
+    Playing,
+    Game_Over
+}
+
+
 // Game Controller (GC) class
 // responsible for controlling the Game State and other components
 public class GC : MonoBehaviour
 {
-    private enum GameState
-    {
-        Loading,
-        Awaiting_Start,
-        Playing,
-        Paused
-    }
 
     #region Members
+    public GameState state = GameState.Loading;
 
     public Karma_API api;
     private Karma_API_JSON level = new Karma_API_JSON();
-    [SerializeField] private GameState state = GameState.Loading;
+
     [SerializeField] private bool levelLoaded = false;
     [SerializeField] private bool paused = false;
     private Vector2 screen;
@@ -69,7 +74,6 @@ public class GC : MonoBehaviour
         Debug.Log("Controller says top number = " + numbers[0].ToString());
         // State Change
         ChangeState();
-
     }
 
     private void ChangeState()
@@ -80,6 +84,7 @@ public class GC : MonoBehaviour
             Debug.Log("Numbers are in order : " + CheckNumbers());
             // Not the right place, but an initial test
             CC.SpawnNumbers(numbers,Ascending);
+            CC.StateChange(GameState.Game_Intro);
             timer = 0f;
             timerRunning = true;
         }
@@ -129,7 +134,7 @@ public class GC : MonoBehaviour
         }
 
         // now to populate what "box" it's touching ... only if playing
-        if (state == GameState.Awaiting_Start)
+        if (state == GameState.Playing)
         {
             BoxHoverOver = -1;
             for (int i = 0; i < CC.myPositions.Length; i++)
@@ -194,6 +199,7 @@ public class GC : MonoBehaviour
     {
         screen = new Vector2(Screen.width, Screen.height);
         offset.x = screen.x * 0.1f;
+        CC.gc = this;
         GetLevel();
     }
 
@@ -203,7 +209,7 @@ public class GC : MonoBehaviour
         GetMouseTouch();
 
 
-        if (state == GameState.Awaiting_Start)
+        if (state == GameState.Playing)
         {
             // frame mouse first clicked
             if (Input.GetMouseButtonDown(0) )

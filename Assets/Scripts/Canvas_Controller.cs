@@ -19,6 +19,7 @@ public class Canvas_Controller : MonoBehaviour
     public RectTransform DirectionDown;
     public RectTransform Welcome;
     public RectTransform StartIntro;
+    public RectTransform GameOver;
 
     public GameObject numberPreFab;
 
@@ -90,6 +91,11 @@ public class Canvas_Controller : MonoBehaviour
         StateChange(GameState.Playing);
     }
 
+    public void NewGameCalled ()
+    {
+        StateChange(GameState.Loading);
+    }
+
     public void StateChange (GameState state)
     {
         switch (state)
@@ -99,6 +105,8 @@ public class Canvas_Controller : MonoBehaviour
                 LoadingCanvas.gameObject.SetActive(true);
                 StartIntro.gameObject.SetActive(false);
                 Play.gameObject.SetActive(false);
+                GameOver.gameObject.SetActive(false);
+                gc.ChangeState(GameState.Loading);
                 break;
 
             case GameState.Welcome:
@@ -106,14 +114,16 @@ public class Canvas_Controller : MonoBehaviour
                 LoadingCanvas.gameObject.SetActive(false);
                 StartIntro.gameObject.SetActive(false);
                 Play.gameObject.SetActive(false);
+                GameOver.gameObject.SetActive(false);
                 break;
 
             case GameState.Game_Intro:
                 Welcome.gameObject.SetActive(false);
                 LoadingCanvas.gameObject.SetActive(false);
                 StartIntro.gameObject.SetActive(true);
-                StartIntro.gameObject.GetComponentInChildren<Intro>().StartCounter(true);
+                StartIntro.gameObject.GetComponentInChildren<Intro>().StartCounter(Ascending);
                 Play.gameObject.SetActive(false);
+                GameOver.gameObject.SetActive(false);
                 break;
 
             case GameState.Playing:
@@ -121,7 +131,9 @@ public class Canvas_Controller : MonoBehaviour
                 LoadingCanvas.gameObject.SetActive(false);
                 StartIntro.gameObject.SetActive(false);
                 Play.gameObject.SetActive(true);
+                GameOver.gameObject.SetActive(false);
                 GameStart();
+                gc.ChangeState(GameState.Playing);
                 break;
 
             case GameState.Game_Over:
@@ -129,6 +141,8 @@ public class Canvas_Controller : MonoBehaviour
                 LoadingCanvas.gameObject.SetActive(false);
                 StartIntro.gameObject.SetActive(false);
                 Play.gameObject.SetActive(false);
+                GameOver.gameObject.SetActive(true);
+                foreach (Number num in myNumbers) num.killMe();
                 break;
 
             case GameState.Awaiting_Start:
@@ -136,6 +150,7 @@ public class Canvas_Controller : MonoBehaviour
                 LoadingCanvas.gameObject.SetActive(false);
                 StartIntro.gameObject.SetActive(false);
                 Play.gameObject.SetActive(false);
+                GameOver.gameObject.SetActive(false);
                 break;
 
             default:
@@ -170,7 +185,7 @@ public class Canvas_Controller : MonoBehaviour
 
     public void SpawnNumbers (int[] numbers, bool Ascending)
     {
-
+        // store what's been passed for use after co-routine
         gameNumbers = numbers;
         this.Ascending = Ascending;
 

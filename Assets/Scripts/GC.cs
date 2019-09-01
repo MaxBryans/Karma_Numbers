@@ -73,20 +73,37 @@ public class GC : MonoBehaviour
         levelLoaded = true;
         Debug.Log("Controller says top number = " + numbers[0].ToString());
         // State Change
-        ChangeState();
+        ChangeState(GameState.Awaiting_Start);
     }
 
-    private void ChangeState()
+    public void ChangeState(GameState NewState)
     {
-        if (state == GameState.Loading)
+
+        if (NewState == GameState.Loading)
+        {
+            GetLevel();
+        }
+
+        if (NewState == GameState.Awaiting_Start)
         {
             state = GameState.Awaiting_Start;
             Debug.Log("Numbers are in order : " + CheckNumbers());
-            // Not the right place, but an initial test
             CC.SpawnNumbers(numbers,Ascending);
             CC.StateChange(GameState.Game_Intro);
+        }
+
+        if (NewState == GameState.Playing) // N.B. called by CC once start timer finished
+        {
             timer = 0f;
             timerRunning = true;
+            state = GameState.Playing;
+        }
+
+        if (NewState == GameState.Game_Over)
+        {
+            timerRunning = false;
+            CC.StateChange(GameState.Game_Over);
+            state = GameState.Game_Over;
         }
     }
 
@@ -157,7 +174,7 @@ public class GC : MonoBehaviour
         CC.UpdateNumbers(numbers);
         BoxSelected = -1;
         MouseDown = false;
-        if (CheckNumbers()) timerRunning = false;
+        if (CheckNumbers()) ChangeState(GameState.Game_Over);
 
     }
 

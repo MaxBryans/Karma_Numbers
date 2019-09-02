@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Canvas_Controller : MonoBehaviour
 {
-    public GC gc;
+    public GC gc; // injected by GC upon Load
 
     public Load_Rotator LoadScreen;
 
@@ -15,8 +15,9 @@ public class Canvas_Controller : MonoBehaviour
     public RectTransform Title;
     public RectTransform Play;
     public RectTransform Controls;
-    public RectTransform DirectionUp;
-    public RectTransform DirectionDown;
+    public RectTransform Instructions;
+    public Text Upper;
+    public Text Lower;
     public RectTransform Welcome;
     public RectTransform StartIntro;
     public RectTransform GameOver;
@@ -39,9 +40,8 @@ public class Canvas_Controller : MonoBehaviour
         Title.sizeDelta = new Vector2(screen.x, screen.y * 0.15f);
         Play.sizeDelta = new Vector2(screen.x, screen.y * 0.7f);
         Controls.sizeDelta = new Vector2(screen.x, screen.y * 0.15f);
-        DirectionUp.sizeDelta = DirectionDown.sizeDelta = new Vector2(screen.x / 4, screen.y * 0.7f);
-        DirectionUp.position = new Vector3(screen.x * 7/8, screen.y / 2f);
-        DirectionDown.position = new Vector3(screen.x * 1 / 8, screen.y / 2f);
+        Instructions.sizeDelta = new Vector2(screen.x / 4, screen.y * 0.7f);
+        Instructions.position = new Vector3(screen.x * 1 / 8, screen.y / 2f);
     }
 
     public void SwapNumbers (int index1, int index2)
@@ -199,8 +199,18 @@ public class Canvas_Controller : MonoBehaviour
         SetLoadingCanvas(false);
         myNumbers = new Number[gameNumbers.Length];
         SetPositions(gameNumbers.Length);
-        if (Ascending) { DirectionUp.gameObject.SetActive(true); DirectionDown.gameObject.SetActive(false); }
-        else { DirectionUp.gameObject.SetActive(false); DirectionDown.gameObject.SetActive(true); }
+        if (Ascending) {
+            Upper.text = "Low";
+            Upper.color = Color.red;
+            Lower.text = "High";
+            Lower.color = Color.green;
+        }
+        else {
+            Lower.text = "Low";
+            Lower.color = Color.red;
+            Upper.text = "High";
+            Upper.color = Color.green;
+        }
 
         for (int i = 0; i < gameNumbers.Length; i++)
         {
@@ -223,7 +233,7 @@ public class Canvas_Controller : MonoBehaviour
     // Button Management
     public void Welcome_Start_Button ()
     {
-
+        StateChange(GameState.Loading);
     }
 
     void Awake ()

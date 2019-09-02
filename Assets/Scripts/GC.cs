@@ -21,7 +21,7 @@ public class GC : MonoBehaviour
 {
 
     #region Members
-    public GameState state = GameState.Loading;
+    public GameState state = GameState.Welcome;
 
     public Karma_API api;
     private Karma_API_JSON level = new Karma_API_JSON();
@@ -72,6 +72,10 @@ public class GC : MonoBehaviour
         numbers = level.numbers;
         levelLoaded = true;
         Debug.Log("Controller says top number = " + numbers[0].ToString());
+        // This checks if numbers are already in order, and shuffles them (if required)
+        // Test for Shuffle
+        numbers = new int[] { 0, 50, 99 };
+        Shuffle();
         // State Change
         ChangeState(GameState.Awaiting_Start);
     }
@@ -109,7 +113,7 @@ public class GC : MonoBehaviour
 
     private bool CheckNumbers()
     {
-        if (Ascending)
+        if (!Ascending)
         {
             for (int i = 0; i < numbers.Length - 1; i++)
             {
@@ -130,6 +134,44 @@ public class GC : MonoBehaviour
             }
         }
         return true;
+    }
+
+    private void Shuffle()
+    {
+        int len = numbers.Length;
+
+        // have to check we don't have an array of identical numbers, and get a new one if we do
+        bool identical = true;
+        for (int i = 1; i < len; i++)
+        {
+            if (numbers[0] != numbers[i]) identical = false;
+        }
+
+        if (identical)
+        {
+            Debug.Log("Identical Numbers - fetching a new level");
+            GetLevel();
+            return;
+        }
+
+
+        if (CheckNumbers())
+        {
+            Debug.Log("Had to shuffle numbers");
+            bool ShuffleRequired = true;
+            while (ShuffleRequired)
+            {
+                // Fisher/Yates shuffle
+                for (int i = 0; i < len; i++)
+                {
+                    int swap = UnityEngine.Random.Range(0, len - 1);
+                    int temp = numbers[swap];
+                    numbers[swap] = numbers[i];
+                    numbers[i] = temp;
+                }
+                if (!CheckNumbers()) ShuffleRequired = false;
+            }
+        }
     }
 
     // if there's a touch .. use that as "mouse" ... else use the mouse
@@ -217,7 +259,8 @@ public class GC : MonoBehaviour
         screen = new Vector2(Screen.width, Screen.height);
         offset.x = screen.x * 0.1f;
         CC.gc = this;
-        GetLevel();
+        CC.StateChange(GameState.Welcome);
+        // GetLevel();
     }
 
     // Update is called once per frame

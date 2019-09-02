@@ -74,8 +74,9 @@ public class GC : MonoBehaviour
         Debug.Log("Controller says top number = " + numbers[0].ToString());
         // This checks if numbers are already in order, and shuffles them (if required)
         // Test for Shuffle
-        numbers = new int[] { 0, 50, 99 };
+            //numbers = new int[] { 0, 50, 99 };
         Shuffle();
+
         // State Change
         ChangeState(GameState.Awaiting_Start);
     }

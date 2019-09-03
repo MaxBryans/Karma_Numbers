@@ -8,6 +8,8 @@ public class Intro : MonoBehaviour
     public Canvas_Controller CC;
     public Text direction;
     public Text counter;
+    public RectTransform counterbox;
+    private Vector3 O_Scale;
 
     public void StartCounter (bool Ascending)
     {
@@ -27,28 +29,53 @@ public class Intro : MonoBehaviour
 
     private IEnumerator timer ()
     {
+        float myCount = 0f;
         counter.text = "3";
-        yield return new WaitForSeconds(1);
+        while (myCount <=1f)
+        {
+            myCount += Time.deltaTime;
+            ScaleMyBox(0.5f + myCount);
+            yield return null;
+        }
+
+        myCount = 0f;
         counter.text = "2";
-        yield return new WaitForSeconds(1);
+        while (myCount <= 1f)
+        {
+            myCount += Time.deltaTime;
+            ScaleMyBox(0.5f + myCount);
+            yield return null;
+        }
+
+        myCount = 0f;
         counter.text = "1";
-        yield return new WaitForSeconds(1);
+        while (myCount <= 1f)
+        {
+            myCount += Time.deltaTime;
+            ScaleMyBox(0.5f + myCount);
+            yield return null;
+        }
+
+        myCount = 0f;
         counter.text = "GO !!";
-        yield return new WaitForSeconds(0.5f);
+        while (myCount <= 0.5f)
+        {
+            myCount += Time.deltaTime;
+            ScaleMyBox(1f + myCount);
+            yield return null;
+        }
         CC.CounterFinished();
     }
 
+    private void ScaleMyBox(float scaleFactor)
+    {
+        counterbox.localScale = O_Scale * (scaleFactor);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        O_Scale = counterbox.localScale;
     }
 
 }

@@ -21,6 +21,7 @@ public class Canvas_Controller : MonoBehaviour
     public RectTransform Welcome;
     public RectTransform StartIntro;
     public RectTransform GameOver;
+    private GameOverLerper gol;
 
     public GameObject numberPreFab;
 
@@ -143,6 +144,7 @@ public class Canvas_Controller : MonoBehaviour
                 Play.gameObject.SetActive(false);
                 GameOver.gameObject.SetActive(true);
                 foreach (Number num in myNumbers) num.killMe();
+                gol.DoIt();
                 break;
 
             case GameState.Awaiting_Start:
@@ -248,6 +250,7 @@ public class Canvas_Controller : MonoBehaviour
         screen = new Vector2(width = Screen.width, Screen.height);
         pitch = screen.y * 0.07f;
         top = screen.y * (0.85f - 0.035f);
+        gol = GameOver.GetComponent<GameOverLerper>();
         ConfigurePanels();
     }
 

@@ -983,6 +983,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607073177}
   m_CullTransparentMesh: 0
+--- !u!1 &640922476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 640922477}
+  - component: {fileID: 640922478}
+  m_Layer: 0
+  m_Name: TweenFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &640922477
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640922476}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1021548564}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &640922478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640922476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44945c6714103764f9c9a2630e9b0146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &658425746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1075,7 +1118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &986645766
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1122,6 +1165,7 @@ MonoBehaviour:
   CC: {fileID: 1847230577}
   direction: {fileID: 1932864590}
   counter: {fileID: 1332172141}
+  counterbox: {fileID: 1332172140}
 --- !u!1 &1009405537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1273,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 100427335}
+  - {fileID: 640922477}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1416,7 +1461,7 @@ RectTransform:
   m_GameObject: {fileID: 1332172139}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.18, y: 6.6482697, z: 1}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_Children: []
   m_Father: {fileID: 986645766}
   m_RootOrder: 3
@@ -1586,6 +1631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1494845675}
+  - component: {fileID: 1494845676}
   m_Layer: 5
   m_Name: 05GameOver
   m_TagString: Untagged
@@ -1614,6 +1660,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1494845676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494845674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961c501619e0a4a49b5c3a97cbb97342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myRT: {fileID: 1494845675}
+  globalTF: {fileID: 640922478}
+  myButton: {fileID: 544230178}
+  TransitionTime: 1.5
+  myTween: 12
+  StartScale: 0.5
+  FinishScale: 1
 --- !u!1 &1565830985
 GameObject:
   m_ObjectHideFlags: 0

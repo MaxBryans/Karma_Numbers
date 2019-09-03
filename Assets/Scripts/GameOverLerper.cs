@@ -15,15 +15,15 @@ public class GameOverLerper : MonoBehaviour
     public float StartScale = 0.5f;
     public float FinishScale = 1f;
 
-    private Vector3 StartPosition;
-    private Vector3 FinalPosition;
+    [SerializeField] private Vector3 StartPosition;
+    [SerializeField] private Vector3 FinalPosition;
 
  
 
-    void Start ()
+    void Awake ()
     {
-        FinalPosition = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-        StartPosition = new Vector3(Screen.width / 2, Screen.height + (myRT.sizeDelta.y / 2), 0f);
+        FinalPosition = Vector3.zero;
+        StartPosition = new Vector3(0f, Screen.height, 0f);
     }
 
     public void DoIt ()
@@ -38,6 +38,7 @@ public class GameOverLerper : MonoBehaviour
         while (t <= TransitionTime)
         {
             myRT.localPosition = globalTF.DoTweenV3(StartPosition, FinalPosition, myTween, t / TransitionTime);
+            myRT.localScale = Vector3.one * (StartScale + globalTF.DoTween(myTween, (FinishScale - StartScale) * (t / TransitionTime)));
             t += Time.deltaTime;
             yield return null;
         }

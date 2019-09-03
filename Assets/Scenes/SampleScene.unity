@@ -1676,9 +1676,11 @@ MonoBehaviour:
   globalTF: {fileID: 640922478}
   myButton: {fileID: 544230178}
   TransitionTime: 1.5
-  myTween: 12
+  myTween: 11
   StartScale: 0.5
   FinishScale: 1
+  StartPosition: {x: 0, y: 0, z: 0}
+  FinalPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1565830985
 GameObject:
   m_ObjectHideFlags: 0

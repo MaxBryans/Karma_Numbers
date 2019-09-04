@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Canvas_Controller : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class Canvas_Controller : MonoBehaviour
     public RectTransform Play;
     public RectTransform Controls;
     public RectTransform Instructions;
-    public Text Upper;
-    public Text Lower;
+    public TextMeshProUGUI upper;
+    public TextMeshProUGUI lower;
     public RectTransform Welcome;
     public RectTransform StartIntro;
     public RectTransform GameOver;
@@ -202,16 +203,16 @@ public class Canvas_Controller : MonoBehaviour
         myNumbers = new Number[gameNumbers.Length];
         SetPositions(gameNumbers.Length);
         if (Ascending) {
-            Upper.text = "Low";
-            Upper.color = Color.red;
-            Lower.text = "High";
-            Lower.color = Color.green;
+            upper.text = "Low";
+            upper.color = Color.red;
+            lower.text = "High";
+            lower.color = Color.green;
         }
         else {
-            Lower.text = "Low";
-            Lower.color = Color.red;
-            Upper.text = "High";
-            Upper.color = Color.green;
+            lower.text = "Low";
+            lower.color = Color.red;
+            upper.text = "High";
+            upper.color = Color.green;
         }
 
         for (int i = 0; i < gameNumbers.Length; i++)

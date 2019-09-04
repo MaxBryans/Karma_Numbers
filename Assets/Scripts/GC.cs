@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public enum GameState
 {
@@ -47,7 +48,7 @@ public class GC : MonoBehaviour
     [SerializeField]
     private float timer = 0f;
     private bool timerRunning = false;
-    public Text timertext;
+    public TextMeshProUGUI timertext;
 
     // need to talk to the Canvas_Controller
     public Canvas_Controller CC;

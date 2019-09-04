@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.EventSystems;
 
 public class Number : MonoBehaviour
@@ -9,7 +10,7 @@ public class Number : MonoBehaviour
     public Canvas_Controller CC; // N.B. injected by the creating Canvas Controller
 
     public int myValue;
-    public Text text;
+    public TextMeshProUGUI text;
     public bool Highlighted;
 
     private RectTransform myRT;

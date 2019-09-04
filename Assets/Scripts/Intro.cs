@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Intro : MonoBehaviour
 {
     public Canvas_Controller CC;
-    public Text direction;
-    public Text counter;
+    public TextMeshProUGUI direction;
+    public TextMeshProUGUI counter;
     public RectTransform counterbox;
     private Vector3 O_Scale;
 
